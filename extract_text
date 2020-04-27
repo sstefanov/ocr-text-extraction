@@ -41,6 +41,18 @@ if not os.path.isfile(input_file):
 
 DEBUG = 0
 
+# Load the image
+orig_img = cv2.imread(input_file)
+
+# Add a border to the image for processing sake
+img = cv2.copyMakeBorder(orig_img, 50, 50, 50, 50, cv2.BORDER_CONSTANT)
+
+# Calculate the width and height of the image
+img_y = len(img)
+img_x = len(img[0])
+
+#MAXBLOCKSIZE = (img_x * img_y) / 5
+MAXBLOCKSIZE = 2500
 
 # Determine pixel intensity
 # Apparently human eyes register colors differently.
@@ -152,7 +164,7 @@ def keep_box(contour):
         return False
     
     # check size of the box
-    if ((w_ * h_) > ((img_x * img_y) / 5)) or ((w_ * h_) < 15):
+    if ((w_ * h_) > (MAXBLOCKSIZE)) or ((w_ * h_) < 15):
         if DEBUG:
             print "\t Rejected because of size"
         return False
@@ -182,16 +194,6 @@ def include_box(index, h_, contour):
     if DEBUG:
         print "\t keeping"
     return True
-
-# Load the image
-orig_img = cv2.imread(input_file)
-
-# Add a border to the image for processing sake
-img = cv2.copyMakeBorder(orig_img, 50, 50, 50, 50, cv2.BORDER_CONSTANT)
-
-# Calculate the width and height of the image
-img_y = len(img)
-img_x = len(img[0])
 
 if DEBUG:
     print "Image is " + str(len(img)) + "x" + str(len(img[0]))
